@@ -9,25 +9,30 @@ html = requests.get(URL).text
 sel = Selector(text=html)
 
 # Retorna uma lista com a url do anuncio do imóvel.   
-TEXTO_COMUM_URL_ANUNCIO = f'quartos-{BAIRRO}-niteroi'
+TEXTO_COMUM_URL_ANUNCIO = f'apartamento-'
 url_anuncio = sel.css(f'a[href*={TEXTO_COMUM_URL_ANUNCIO}]::attr(href)').getall()
 
 # Retorna uma lista com as informações do imóvel.
 TEXTO_DIV_GRID_CARD_RESULTADO = 'ROW_CARD'
 html_div = sel.css(F'div[data-testid*={TEXTO_DIV_GRID_CARD_RESULTADO}]')
-dados_anuncio = html_div.css('span::text').getall()
+info_anuncio = html_div.css('span::text').getall()
 
-# Realiza o tratamento dos dados de saída
+# Realiza o tratamento dos dados de saída e retorna em uma lista.
 IMOBILIARIA = 'QuintoAndar'
-REMOVE_LIST = ['Apartamento', f'{BAIRRO.capitalize()}, Niterói']
-dados_anuncio = [e for e in dados_anuncio if e not in REMOVE_LIST]
-dados_anuncio = [dados_anuncio[e:e+5] for e in range(0, len(dados_anuncio), 5)]
-dados = [[IMOBILIARIA] + dados_anuncio[e] + [url_anuncio[e]] for e in range(0, len(dados_anuncio))]
-for imovel in dados:
-    imovel[2] = imovel[2][:imovel[2].find(' ')]
-    imovel[3] = imovel[3][:imovel[3].find(' ')]
-    imovel[4] = imovel[4][imovel[4].find('R')+3:].replace('.','')
-    imovel[5] = imovel[5][imovel[5].find('R')+3:].replace('.','')
-    imovel.insert(0, imovel[6][38:47])
-
-print(dados)
+QTD_ELEMENTOS = 7
+if len(info_anuncio)/len(url_anuncio) == QTD_ELEMENTOS:
+    info_anuncio = [info_anuncio[e:e+QTD_ELEMENTOS] for e in range(0, len(info_anuncio), QTD_ELEMENTOS)]
+    dados = [info_anuncio[e] + [url_anuncio[e]] for e in range(0, len(info_anuncio))]
+    for imovel in dados:
+        imovel.insert(0, imovel[7][38:47])
+        imovel[1] = IMOBILIARIA
+        imovel.insert(3, imovel[3][:imovel[3].find(',')])
+        imovel[4] = imovel[4][imovel[4].find(',')+2:]   
+        imovel[5] = imovel[5][:imovel[5].find(' ')]
+        imovel[6] = imovel[6][:imovel[6].find(' ')]
+        imovel[7] = imovel[7][imovel[7].find('R')+3:].replace('.','')
+        imovel[8] = imovel[8][imovel[8].find('R')+3:].replace('.','')
+    print(dados)
+    print(len(dados))
+else:
+    print('Rever a lógica que lista as informações do anuncio (linhas 17 a 19)')
