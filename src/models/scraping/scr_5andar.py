@@ -2,6 +2,7 @@ import requests
 from parsel import Selector
 from playwright.sync_api import sync_playwright
 from time import sleep
+from datetime import date
 
 TEXTO_CLASS_P_QTD_ENCONTRADA = 'CozyTypography'
 TEXTO_SPAN_QTD_N_ENCONTRADA = 'Desenhar área de busca'
@@ -9,21 +10,24 @@ TEXTO_CLASS_H4_IMOVEL_N_ENCONTRADO = 'CozyTypography'
 TEXTO_SPAN_IMOVEL_N_ENCONTRADO = 'Não encontramos'
 TEXTO_HREF_URL_ANUNCIO = 'apartamento-'
 TEXTO_DIV_GRID_CARD_RESULTADO = 'ROW_CARD'
-TEXTOS_PARA_REMOVER = [
-            'Sem tempo para procurar?',
-            'Saiba quando chegarem novos imóveis desta busca e a retome quando quiser',
-            'Criar alerta de imóveis',
-            'Novidade!',
-            'Imóveis verificados e com ótima conservação'
-        ]
 IMOBILIARIA = 'QuintoAndar'
 QTD_ELEMENTOS = 7
 TEXTO_BTN_VER_MAIS = 'Ver mais'
+DATA = date.today()
+DATA_FORMATADA = DATA.strftime('%d/%m/%Y')
+TEXTOS_PARA_REMOVER = [
+    'Sem tempo para procurar?',
+    'Saiba quando chegarem novos imóveis desta busca e a retome quando quiser',
+    'Criar alerta de imóveis',
+    'Novidade!',
+    'Imóveis verificados e com ótima conservação'
+    ]
+
 
 class Scr5Andar():
     '''Retorna um conjunto de listas contendo as informaçoes dos apartamentos de 3 ou 4 quartos para alugar por bairro na cidade de Niterói - RJ, estraída do site da imobiliaria 5º Andar, conforme estrutura a seguir:
 
-    [['id_anuncio', 'imobiliaria', 'rua', 'bairro', 'cidade', 'metragem', 'quartos', 'vlr', 'vlr_com_tx', 'link_anuncio'],...]
+    [['cod_anuncio', 'imobiliaria', 'rua', 'bairro', 'cidade', 'metragem', 'quartos', 'vlr', 'vlr_com_tx', 'link_anuncio'],...]
 
     bairro padrão -> fonseca
     '''
@@ -65,14 +69,16 @@ class Scr5Andar():
             info_anuncio = [info_anuncio[e:e+QTD_ELEMENTOS] for e in range(0, len(info_anuncio), QTD_ELEMENTOS)]
             _dados = [info_anuncio[e] + [url_anuncio[e]] for e in range(0, len(info_anuncio))]
             for imovel in _dados:
-                imovel.insert(0, imovel[7][38:47])
-                imovel[1] = IMOBILIARIA
-                imovel.insert(3, imovel[3][:imovel[3].find(',')])
-                imovel[4] = imovel[4][imovel[4].find(',')+2:]   
-                imovel[5] = imovel[5][:imovel[5].find(' ')]
-                imovel[6] = imovel[6][:imovel[6].find(' ')]
-                imovel[7] = imovel[7][imovel[7].find('R')+3:].replace('.','')
-                imovel[8] = imovel[8][imovel[8].find('R')+3:].replace('.','')
+                imovel.insert(0, imovel[7][38:47])  
+                imovel[1] = IMOBILIARIA # imobiliaria
+                imovel.insert(3, imovel[3][:imovel[3].find(',')]) # bairro
+                imovel[4] = imovel[4][imovel[4].find(',')+2:] # cidade   
+                imovel[5] = int(imovel[5][:imovel[5].find(' ')]) # metragem
+                imovel[6] = int(imovel[6][:imovel[6].find(' ')]) # quartos
+                imovel[7] = int(imovel[7][imovel[7].find('R')+3:].replace('.','')) # vlr
+                imovel[8] = int(imovel[8][imovel[8].find('R')+3:].replace('.','')) # vlr_com_tx
+                imovel.append(DATA_FORMATADA) # criado_em
+            _dados = [tuple(e) for e in _dados]
             return _dados
     
     # Inilicializa um navegador e carrega a url
@@ -106,7 +112,6 @@ class Scr5Andar():
         self._sel = Selector(text=self._html)
     
     def saida(self):
-        print(f'\nFoi listado {self.__qtd_anuncio__()} imoveis\n')
         if self.__tem_vermais__():
             self.__navegador__()
             while True:
@@ -120,13 +125,9 @@ class Scr5Andar():
             dados = self.__tratamento_dados__()
             return (dados)
         elif self.__qtd_anuncio__() == 0:
-            return ('Não há imóveis\n')
+            return ([])
         else:
             self.__url_anuncio__()
             self.__info_anuncio__()
             dados = self.__tratamento_dados__()
             return (dados)
-
-if __name__ == "__main__":
-    
-    print (Scr5Andar(bairro='icarai').saida())
