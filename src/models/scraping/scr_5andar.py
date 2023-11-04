@@ -2,7 +2,6 @@ import requests
 from parsel import Selector
 from playwright.sync_api import sync_playwright
 from time import sleep
-# from datetime import date
 
 TEXTO_CLASS_P_QTD_ENCONTRADA = 'CozyTypography'
 TEXTO_SPAN_QTD_N_ENCONTRADA = 'Desenhar área de busca'
@@ -13,8 +12,6 @@ TEXTO_DIV_GRID_CARD_RESULTADO = 'ROW_CARD'
 IMOBILIARIA = 'QuintoAndar'
 QTD_ELEMENTOS = 7
 TEXTO_BTN_VER_MAIS = 'Ver mais'
-# DATA = date.today()
-# DATA_FORMATADA = DATA.strftime('%d/%m/%Y')
 TEXTOS_PARA_REMOVER = [
     'Sem tempo para procurar?',
     'Saiba quando chegarem novos imóveis desta busca e a retome quando quiser',
@@ -77,7 +74,6 @@ class Scr5Andar():
                 imovel[6] = int(imovel[6][:imovel[6].find(' ')]) # quartos
                 imovel[7] = int(imovel[7][imovel[7].find('R')+3:].replace('.','')) # vlr
                 imovel[8] = int(imovel[8][imovel[8].find('R')+3:].replace('.','')) # vlr_com_tx
-                # imovel.append(DATA_FORMATADA) # criado_em
             _dados = [[tuple(e)] for e in _dados]
         
             return _dados
@@ -89,7 +85,6 @@ class Scr5Andar():
         self._page = self._browser.new_page()
         self._page.goto(self._url)
         sleep(2)
-        # return(_page, _browser, _pw)
 
     # Finaliza o navegador
     def __fecha_navegador__(self):
@@ -132,5 +127,3 @@ class Scr5Andar():
             self.__info_anuncio__()
             dados = self.__tratamento_dados__()
             return (dados)
-        
-# print(Scr5Andar(bairro='piratininga').saida())
