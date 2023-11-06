@@ -8,18 +8,11 @@ DATA_FORMATADA = DATA.strftime('%d/%m/%Y')
 
 class DataB():
     '''Implementa ORM parametrizado para manipular o BD das informações obtidas a partir do scraping dos anuncios dos imóveis.'''
+        
 
-    # Cria uma conexão com o banco e estancia o cursor
-    def __init__(self, bairro='fonseca', dados=None):
-        self.bairro = bairro
-        self.anuncios = dados
-        if len(self.anuncios) > 0:
-            self.con = sqlite3.connect(BD)
-            self.cur = self.con.cursor()
-            self.cria_tabela_bairro()
-            self.insere_dados()
-            self.anuncio_finalizado()
-            self.encerrar_conexao()
+    def criar_conexão(self):
+        self.con = sqlite3.connect(BD)
+        self.cur = self.con.cursor()
     
     def encerrar_conexao(self):
         ''' Encerra a conexão com o BD'''
@@ -49,34 +42,41 @@ class DataB():
             ''')
         self.con.commit()
 
-    def insere_dados(self):
+    def insere_dados(self, bairro='fonseca', dados=None):
         ''' Insere os dados na tabela a partir de uma lista de listas contendo uma tupla com os dados do anuncio:
             cod_anuncio, imobiliaria, rua, bairro, cidade, metragem, quartos, vlr, vlr_com_tx, link_anuncio e criado_em. 
         '''
-        for anuncio in self.anuncios:   
-            anuncio = [anuncio[0] + (DATA_FORMATADA,)]           
-            try:
-                self.cur.executemany(f'''
-                    INSERT INTO {self.bairro} (
-                    cod_anuncio, 
-                    imobiliaria, 
-                    rua, 
-                    bairro, 
-                    cidade, 
-                    metragem, 
-                    quartos, 
-                    vlr, 
-                    vlr_com_tx, 
-                    link_anuncio,
-                    criado_em
-                    ) VALUES (?,?,?,?,?,?,?,?,?,?,?)
-                ''', anuncio) 
-                self.con.commit()
-            except: 
-                pass
+        self.bairro = bairro
+        self.anuncios = dados
+        if len(self.anuncios) > 0:
+            self.criar_conexão()
+            self.cria_tabela_bairro()
+            for anuncio in self.anuncios:   
+                anuncio = [anuncio[0] + (DATA_FORMATADA,)]           
+                try:
+                    self.cur.executemany(f'''
+                        INSERT INTO {self.bairro} (
+                        cod_anuncio, 
+                        imobiliaria, 
+                        rua, 
+                        bairro, 
+                        cidade, 
+                        metragem, 
+                        quartos, 
+                        vlr, 
+                        vlr_com_tx, 
+                        link_anuncio,
+                        criado_em
+                        ) VALUES (?,?,?,?,?,?,?,?,?,?,?)
+                    ''', anuncio) 
+                    self.con.commit()
+                except: 
+                    pass
+            self.atualiza_finalizado()
+            self.encerrar_conexao()
 
     # Atualiza o campo "finalizado_em" com a data do dia, caso o anuncio registrado anteriormente no banco foi finalizado
-    def anuncio_finalizado(self):
+    def atualiza_finalizado(self):
         self.cur.execute(f'''SELECT * FROM {self.bairro} WHERE finalizado_em IS NULL;''')
         registros_bairro = [[l[1:11]] for l in self.cur.fetchall()]
         if len(registros_bairro) > 0:
@@ -91,3 +91,24 @@ class DataB():
                         AND imobiliaria = ? 
                         ''', registro)
                     self.con.commit()
+
+    def anunciado_hoje(self, bairro='fonseca'):
+        self.criar_conexão()
+        self.cur.execute(f'''SELECT * FROM {bairro} WHERE criado_em = '{DATA_FORMATADA}';''')
+        hoje = [registro for registro in self.cur.fetchall()]
+        self.encerrar_conexao()
+        return hoje
+    
+    def anuncios_ativos(self, bairro='fonseca'):
+        self.criar_conexão()
+        self.cur.execute(f'''SELECT * FROM {bairro} WHERE finalizado_em IS NULL;''')
+        ativo = [registro for registro in self.cur.fetchall()]
+        self.encerrar_conexao()
+        return ativo
+    
+    def anuncios_finalizados(self, bairro='fonseca'):
+        self.criar_conexão()
+        self.cur.execute(f'''SELECT * FROM {bairro} WHERE finalizado_em IS NOT NULL;''')
+        finalizado = [registro for registro in self.cur.fetchall()]
+        self.encerrar_conexao()
+        return finalizado
