@@ -1,8 +1,7 @@
 import sqlite3
-from scraping import scr_5andar
 from datetime import date
 
-BD = 'ap.db'
+BD = 'models/ap.db'
 DATA = date.today()
 DATA_FORMATADA = DATA.strftime('%d/%m/%Y')
 
@@ -78,21 +77,17 @@ class DataB():
 
     # Atualiza o campo "finalizado_em" com a data do dia, caso o anuncio registrado anteriormente no banco foi finalizado
     def anuncio_finalizado(self):
-        self.cur.execute(f'''SELECT * FROM {self.bairro};''')
+        self.cur.execute(f'''SELECT * FROM {self.bairro} WHERE finalizado_em IS NULL;''')
         registros_bairro = [[l[1:11]] for l in self.cur.fetchall()]
-        finalizados = [registro[0][0:2] for registro in registros_bairro if not registro in self.anuncios]
-        print(finalizados)
-        for registro in finalizados:
-            registro = (DATA_FORMATADA,) + registro
-            self.cur.execute(f'''
-                UPDATE {self.bairro} 
-                SET finalizado_em = ? 
-                WHERE cod_anuncio = ? 
-                AND imobiliaria = ?
-                ''', registro)
-            self.con.commit()
-
-if __name__ == '__main__':
-    bairro = 'piratininga'
-    lista = scr_5andar.Scr5Andar(bairro=bairro).saida()
-    DataB(bairro=bairro, dados=lista)
+        if len(registros_bairro) > 0:
+            finalizados = [registro[0][0:2] for registro in registros_bairro if not registro in self.anuncios]
+            if len(finalizados) > 0:
+                for registro in finalizados:
+                    registro = (DATA_FORMATADA,) + registro
+                    self.cur.execute(f'''
+                        UPDATE {self.bairro} 
+                        SET finalizado_em = ? 
+                        WHERE cod_anuncio = ? 
+                        AND imobiliaria = ? 
+                        ''', registro)
+                    self.con.commit()
