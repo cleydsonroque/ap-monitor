@@ -7,8 +7,7 @@ DATA_FORMATADA = DATA.strftime('%d/%m/%Y')
 
 
 class DataB():
-    '''Implementa ORM parametrizado para manipular o BD das informações obtidas a partir do scraping dos anuncios dos imóveis.'''
-        
+    '''Implementa ORM parametrizado para manipular o BD das informações obtidas a partir do scraping dos anuncios dos imóveis.'''       
 
     def criar_conexão(self):
         self.con = sqlite3.connect(BD)
