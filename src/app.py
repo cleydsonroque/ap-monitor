@@ -5,6 +5,7 @@ from models.scr_orm import DataB
 bairros = ['piratininga', 'barreto', 'fonseca', 'icarai', 'centro']
 for bairro in bairros:
     lista = Scr5Andar(bairro=bairro).saida()
+    print(lista[0][0])
     bd = DataB()
     bd.insere_dados(bairro=bairro, dados=lista)
     ativos = bd.anuncios_ativos(bairro=bairro)
