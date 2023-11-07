@@ -1,7 +1,7 @@
 import sqlite3
 from datetime import date
 
-BD = 'models/ap.sqlite3'
+BD = 'ap.sqlite3'
 DATA = date.today()
 DATA_FORMATADA = DATA.strftime('%d/%m/%Y')
 
@@ -10,7 +10,7 @@ class DataB():
     '''Implementa ORM parametrizado para manipular o BD das informações obtidas a partir do scraping dos anuncios dos imóveis.'''       
 
     def criar_conexão(self):
-        self.con = sqlite3.connect('models/ap.db')
+        self.con = sqlite3.connect(BD)
         self.cur = self.con.cursor()
     
     def encerrar_conexao(self):
