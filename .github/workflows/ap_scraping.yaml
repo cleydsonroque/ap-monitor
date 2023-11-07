@@ -1,18 +1,9 @@
 name: run app.py
 
-# on:
-#   schedule:
-#     - cron: '*/5 * * * *'
-
-on:
-    push:
-        branches: [main]
-    # pull_request:
-    #     branches: [master]
-
+on: push
 jobs:
-  run_schedule:
-    runs-on: ubuntu-20.04
+  build:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
@@ -26,10 +17,40 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add .
-          git commit -m "Add changes"
-      - uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          git commit -m "generated"
+          git push
+
+
+# on:
+#   schedule:
+#     - cron: '*/5 * * * *'
+
+# on:
+#     push:
+#         branches: [main]
+
+# jobs:
+#   run_schedule:
+#     runs-on: ubuntu-20.04
+#     steps:
+#       - uses: actions/checkout@v4
+#       - uses: actions/setup-python@v4
+#         with:
+#           python-version: '3.11' 
+#           cache: 'pip' # caching pip dependencies
+#       - run: pip install -r requirements.txt
+#       - run: playwright install
+#       - run: python src/app.py
+#       - run: |
+#           git config --local user.name actions-user
+#           git config --local user.email "actions@github.com"
+#           git add .
+#           git commit -m "Add changes"
+#       - uses: ad-m/github-push-action@master
+#       - uses: ad-m/github-push-action@v0.6.0
+#         with:
+#           github_token: ${{ secrets.GITHUB_TOKEN }}
+#           force: true
 
       # - name: check conteudo do repositorio
       #   uses: actions/checkout@v3
