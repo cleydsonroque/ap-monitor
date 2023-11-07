@@ -2,7 +2,7 @@ from models.scraping.scr_5andar import Scr5Andar
 from models.scr_orm import DataB
 
 
-bairros = ['piratininga', 'barreto', 'fonseca', 'icarai', 'centro']
+bairros = ['piratininga', 'barreto', 'fonseca']
 for bairro in bairros:
     lista = Scr5Andar(bairro=bairro).saida()
     bd = DataB()
