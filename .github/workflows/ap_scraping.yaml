@@ -13,8 +13,7 @@ jobs:
       # - run: pip install -r requirements.txt
       # - run: playwright install
       - run: dir
-      - run: cd src
-      - run: dir
+      - run: cd models
       # - run: python src/app.py
       # - run: |
       #     git config user.name github-actions
