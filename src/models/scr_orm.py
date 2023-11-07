@@ -1,7 +1,7 @@
 import sqlite3
 from datetime import date
 
-BD = 'ap.sqlite3'
+BD = 'ap.bd'
 DATA = date.today()
 DATA_FORMATADA = DATA.strftime('%d/%m/%Y')
 
