@@ -83,6 +83,7 @@ class Scr5Andar():
         self._pw = sync_playwright().start()
         self._browser = self._pw.firefox.launch()
         self._page = self._browser.new_page()
+        sleep(5)
         self._page.goto(self._url)
         sleep(2)
 
