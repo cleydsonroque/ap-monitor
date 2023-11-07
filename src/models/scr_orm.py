@@ -10,7 +10,7 @@ class DataB():
     '''Implementa ORM parametrizado para manipular o BD das informações obtidas a partir do scraping dos anuncios dos imóveis.'''       
 
     def criar_conexão(self):
-        self.con = sqlite3.connect(BD)
+        self.con = sqlite3.connect('models/ap.sqlite3')
         self.cur = self.con.cursor()
     
     def encerrar_conexao(self):
