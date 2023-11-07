@@ -14,6 +14,7 @@ jobs:
       # - run: playwright install
       - run: dir
       - run: cd src
+      - run: dir
       # - run: python src/app.py
       # - run: |
       #     git config user.name github-actions
