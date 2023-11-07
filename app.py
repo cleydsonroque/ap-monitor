@@ -9,16 +9,3 @@ for bairro in bairros:
     bd.insere_dados(bairro=bairro, dados=lista)
     ativos = bd.anuncios_ativos(bairro=bairro)
     print(f'{bairro}: {len(ativos)} imóveis anunciados')
-
-# for bairro in bairros:
-#     bd = DataB()
-    # ativos = bd.anuncios_ativos(bairro=bairro)
-    # print(f'{bairro}: {len(ativos)} imóveis anunciados')
-    # finalizados = bd.anuncios_finalizados(bairro=bairro)
-    # print(f'{bairro}: {len(finalizados)} imóveis finalizados')
-    # anuncios = bd.anunciado_hoje(bairro=bairro)
-    # print(f'{bairro}: {len(anuncios)} imóveis anunciados hoje')
-    # for ativo in ativos:
-    #     print(ativo[10])
-    # for finalizado in finalizados:
-    #     print(finalizado[10])

@@ -2,7 +2,7 @@ name: run app.py
 
 on: 
   schedule:
-    - cron: '0 0/12 * * *'
+    - cron: '* * * * *'
 jobs:
   build:
     runs-on: ubuntu-latest
