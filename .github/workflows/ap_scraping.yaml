@@ -27,9 +27,9 @@ jobs:
           git config user.email github-actions@github.com
           git add .
           git commit -m "Add changes"
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+      # uses: ad-m/github-push-action@master
+      # with:
+      #   github_token: ${{ secrets.GITHUB_TOKEN }}
 
       # - name: check conteudo do repositorio
       #   uses: actions/checkout@v3
