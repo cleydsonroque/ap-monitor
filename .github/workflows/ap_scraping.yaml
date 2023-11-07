@@ -22,6 +22,12 @@ jobs:
       - run: pip install -r requirements.txt
       - run: playwright install
       - run: python src/app.py
+      - run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "generated"
+          git push
 
       # - name: check conteudo do repositorio
       #   uses: actions/checkout@v3
