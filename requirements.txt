@@ -1,3 +1,4 @@
+beautifulsoup4==4.12.3
 certifi==2023.7.22
 charset-normalizer==3.3.1
 cssselect==1.2.0
@@ -10,6 +11,7 @@ parsel==1.8.1
 playwright==1.39.0
 pyee==11.0.1
 requests==2.31.0
+soupsieve==2.5
 typing_extensions==4.8.0
 urllib3==2.0.7
 w3lib==2.1.2

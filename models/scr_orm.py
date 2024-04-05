@@ -13,26 +13,30 @@ class DataB():
         self.con = sqlite3.connect(BD)
         self.cur = self.con.cursor()
     
+
     def encerrar_conexao(self):
         ''' Encerra a conexão com o BD'''
         self.con.close()
 
+
     def cria_tabela_bairro(self):
         ''' Caso não exista, cria uma tabela que recebe os dados do anuncio com os seguintes campos: 
-            anuncio_id, cod_anuncio, imobiliaria, rua, bairro, cidade, metragem, quartos, vlr, vlr_com_tx, link_anuncio, criado_em e excluido_em.
+            anuncio_id, cod_anuncio, imobiliaria, categoria, vlr_com_tx, vlr, metragem, quartos, vaga, rua, bairro, cidade, link_anuncio, criado_em e excluido_em.
         '''
         self.cur.execute(f'''
             CREATE TABLE IF NOT EXISTS {self.bairro} (
                 anuncio_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
                 cod_anuncio TEXT NOT NULL,
                 imobiliaria TEXT NOT NULL,
+                categoria TEXT,
+                vlr_com_tx REAL,
+                vlr REAL,
+                metragem INTEGER,
+                quartos INTEGER,
+                vaga INTEGER,
                 rua TEXT,
                 bairro TEXT,
                 cidade TEXT,
-                metragem INTEGER,
-                quartos INTEGER,
-                vlr REAL,
-                vlr_com_tx REAL,
                 link_anuncio TEXT,
                 criado_em TEXT,
                 finalizado_em TEXT,
@@ -41,38 +45,40 @@ class DataB():
             ''')
         self.con.commit()
 
+
     def insere_dados(self, bairro='fonseca', dados=None):
-        ''' Insere os dados na tabela a partir de uma lista de listas contendo uma tupla com os dados do anuncio:
-            cod_anuncio, imobiliaria, rua, bairro, cidade, metragem, quartos, vlr, vlr_com_tx, link_anuncio e criado_em. 
-        '''
+        ''' Insere os dados na tabela a partir de uma lista de listas contendo uma tupla com os dados do anuncio: '''
         self.bairro = bairro
         self.anuncios = dados
+        self.criar_conexão()
+        self.cria_tabela_bairro()
         if len(self.anuncios) > 0:
-            self.criar_conexão()
-            self.cria_tabela_bairro()
             for anuncio in self.anuncios:   
                 anuncio = [anuncio[0] + (DATA_FORMATADA,)]           
                 try:
                     self.cur.executemany(f'''
                         INSERT INTO {self.bairro} (
                         cod_anuncio, 
-                        imobiliaria, 
+                        imobiliaria,
+                        categoria, 
+                        vlr_com_tx, 
+                        vlr, 
+                        metragem, 
+                        quartos,
+                        vaga, 
                         rua, 
                         bairro, 
                         cidade, 
-                        metragem, 
-                        quartos, 
-                        vlr, 
-                        vlr_com_tx, 
                         link_anuncio,
                         criado_em
-                        ) VALUES (?,?,?,?,?,?,?,?,?,?,?)
+                        ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)
                     ''', anuncio) 
                     self.con.commit()
                 except: 
                     pass
-            self.atualiza_finalizado()
-            self.encerrar_conexao()
+        self.atualiza_finalizado()
+        self.encerrar_conexao()
+
 
     # Atualiza o campo "finalizado_em" com a data do dia, caso o anuncio registrado anteriormente no banco foi finalizado
     def atualiza_finalizado(self):
@@ -91,6 +97,7 @@ class DataB():
                         ''', registro)
                     self.con.commit()
 
+
     def anunciado_hoje(self, bairro='fonseca'):
         self.criar_conexão()
         self.cur.execute(f'''SELECT * FROM {bairro} WHERE criado_em = '{DATA_FORMATADA}';''')
@@ -98,6 +105,7 @@ class DataB():
         self.encerrar_conexao()
         return hoje
     
+
     def anuncios_ativos(self, bairro='fonseca'):
         self.criar_conexão()
         self.cur.execute(f'''SELECT * FROM {bairro} WHERE finalizado_em IS NULL;''')
@@ -105,6 +113,7 @@ class DataB():
         self.encerrar_conexao()
         return ativo
     
+
     def anuncios_finalizados(self, bairro='fonseca'):
         self.criar_conexão()
         self.cur.execute(f'''SELECT * FROM {bairro} WHERE finalizado_em IS NOT NULL;''')
