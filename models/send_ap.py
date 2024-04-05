@@ -1,7 +1,5 @@
 import requests
-TOKEN = '6392370895:AAETTDJBu5ZfBom0tRf7Ii_3ZjpHwlL8PhQ'
-CHAT_ID = -4108344840
-
+from .token import TOKEN, CHAT_ID
 
 def to_send(anuncios):
     if len(anuncios) > 0: 
