@@ -77,9 +77,6 @@ class Scr5Andar():
                 novo_valor.append('0 vaga')
             novo_valor = [item.strip() for item in novo_valor]
             lista_info.extend(novo_valor)
-        # print(f'qtd info: {len(lista_info)}')
-        # print(f'qtd url: {len(url_anuncio)}')
-        # print(len(lista_info)/len(url_anuncio))
         if len(lista_info)/len(url_anuncio) == QTD_ELEMENTOS:
             info_anuncio = [lista_info[e:e+QTD_ELEMENTOS] for e in range(0, len(lista_info), QTD_ELEMENTOS)]
             dados_anuncio = [info_anuncio[e] + [url_anuncio[e]] for e in range(0, len(info_anuncio))]
@@ -105,12 +102,6 @@ class Scr5Andar():
                 self._dados.append(imovel)
     
 
-    # Retorna o json com os dados do anuncio
-    def __check_json(self, response):
-        if 'search/coordinates' in response.url:
-            self.trata_json(response.json())
-
-
     # Inilicializa um navegador e carrega a url
     def __navegador__(self):
         self._pw = sync_playwright().start()
@@ -120,8 +111,8 @@ class Scr5Andar():
             {'width': 1200, 'height': 600}
             )
         sleep(3)
-        # self._page.on('response', lambda response: self.__check_json(response))
         self._page.goto(self._url)
+        self._page.wait_for_load_state('networkidle')
         sleep(2)
 
 
@@ -141,20 +132,9 @@ class Scr5Andar():
 
     # Finaliza o navegador
     def __fecha_navegador__(self):
-        # self._page.keyboard.press('Home')
-        # self._page.evaluate('window.scrollTo(0, document.body.scrollHeight);')
-        # self._page.keyboard.press('End')
         sleep(2)   
         self._browser.close()
         self._pw.stop()
-
-
-    # Trata json
-    def trata_json(self, dados_json):
-        hits = dados_json['hits']['hits']
-        print(len(hits))
-        for anuncio in hits:
-            print(anuncio['_source']['id'])
 
 
     # Retorna lista de anuncios formatada conforme input padrão do BD
