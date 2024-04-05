@@ -83,7 +83,7 @@ class DataB():
     # Atualiza o campo "finalizado_em" com a data do dia, caso o anuncio registrado anteriormente no banco foi finalizado
     def atualiza_finalizado(self):
         self.cur.execute(f'''SELECT * FROM {self.bairro} WHERE finalizado_em IS NULL;''')
-        registros_bairro = [[l[1:11]] for l in self.cur.fetchall()]
+        registros_bairro = [[l[1:13]] for l in self.cur.fetchall()]
         if len(registros_bairro) > 0:
             finalizados = [registro[0][0:2] for registro in registros_bairro if not registro in self.anuncios]
             if len(finalizados) > 0:
