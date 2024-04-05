@@ -114,7 +114,7 @@ class Scr5Andar():
     # Inilicializa um navegador e carrega a url
     def __navegador__(self):
         self._pw = sync_playwright().start()
-        self._browser = self._pw.chromium.launch(headless=False)
+        self._browser = self._pw.chromium.launch(headless=True)
         self._page = self._browser.new_page()
         self._page.set_viewport_size(
             {'width': 1200, 'height': 600}
