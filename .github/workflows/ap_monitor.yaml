@@ -1,8 +1,6 @@
 name: run monitor Ap
 
-on:
-  schedule:
-    - cron: '*/5 * * * *'
+on: push
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,8 +12,6 @@ jobs:
           cache: 'pip' # caching pip dependencies
       - run: pip install -r requirements.txt
       - run: playwright install
-      - env: TELEGRAM_API_KEY: ${{ secrets.TELEGRAM_API_KEY }}
-      - env: CHAT_ID: ${{ secrets.CHAT_ID }}
       - run: python app.py
       - run: |
           git config user.name github-actions
