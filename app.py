@@ -15,3 +15,4 @@ for bairro in bairros:
     bd.insere_dados(bairro=bairro, dados=lista)
     anuncios = bd.anunciado_hoje(bairro=bairro)
     to_send(anuncios, token, chat_id)
+print('finalizado')
