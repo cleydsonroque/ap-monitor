@@ -1,4 +1,4 @@
-name: run monitor Ap
+run-name: run monitor Ap
 
 on: push
 jobs:
