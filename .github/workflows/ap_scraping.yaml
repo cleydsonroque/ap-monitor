@@ -1,8 +1,7 @@
-name: run app.py
+run-name: run monitor Ap
 
-on: 
-  schedule:
-    - cron: '0 0/12 * * *'
+on: push
+
 jobs:
   build:
     runs-on: ubuntu-latest
