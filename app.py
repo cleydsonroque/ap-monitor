@@ -1,12 +1,12 @@
-from dotenv import load_dotenv
-import os
+# from dotenv import load_dotenv
+# import os
 from models.scraping.scr_5andar import Scr5Andar
 from models.scr_orm import DataB
 from models.send_ap import to_send
 
-load_dotenv()
-token = os.environ.get('TELEGRAM_API_KEY')
-chat_id = os.environ.get('CHAT_ID')
+# load_dotenv()
+token = '6392370895:AAETTDJBu5ZfBom0tRf7Ii_3ZjpHwlL8PhQ'
+chat_id = -4108344840
 
 bairros = ['piratininga', 'barreto', 'fonseca', 'icarai', 'centro']
 for bairro in bairros:
