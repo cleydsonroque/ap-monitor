@@ -14,6 +14,9 @@ jobs:
           cache: 'pip' # caching pip dependencies
       - run: pip install -r requirements.txt
       - run: playwright install
+      - env: |
+        TELEGRAM_API_KEY: ${{ secrets.TELEGRAM_API_KEY }}
+        CHAT_ID: ${{ secrets.CHAT_ID }}
       - run: python app.py
       - run: |
           git config user.name github-actions
