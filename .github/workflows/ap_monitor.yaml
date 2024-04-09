@@ -1,7 +1,7 @@
 name: Monitor Ap
 on: push
-  schedule:
-    - cron: '0 0/12 * * *'
+  # schedule:
+  #   - cron: '0 0/12 * * *'
 jobs:
   build:
     runs-on: ubuntu-latest
