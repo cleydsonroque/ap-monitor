@@ -4,6 +4,7 @@ from datetime import date
 BD = 'models/ap.db'
 DATA = date.today()
 DATA_FORMATADA = DATA.strftime('%d/%m/%Y')
+print(DATA_FORMATADA)
 
 
 class DataB():

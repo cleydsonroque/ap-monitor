@@ -1,7 +1,7 @@
 name: Monitor Ap
-on: 
-  schedule:
-    - cron: '0 0/12 * * *'
+on: push
+  # schedule:
+  #   - cron: '0 0/12 * * *'
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -9,6 +9,9 @@ jobs:
       TELEGRAM_API_KEY: ${{ secrets.TELEGRAM_API_KEY }}
       CHAT_ID: ${{ secrets.CHAT_ID }} 
     steps:
+      - uses: szenius/set-timezone@v2
+        with:
+          timezoneLinux: "America/Sao_Paulo"
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
         with:
