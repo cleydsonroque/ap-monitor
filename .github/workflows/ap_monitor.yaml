@@ -1,6 +1,7 @@
-run-name: run monitor Ap
-
+name: run monitor Ap
 on: push
+  # schedule:
+  #   - cron: '0 0/12 * * *'
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -13,9 +14,6 @@ jobs:
       - run: pip install -r requirements.txt
       - run: pip install python-dotenv
       - run: playwright install
-      # - env:
-      #   TELEGRAM_API_KEY: ${{ secrets.TELEGRAM_API_KEY }}
-      #   CHAT_ID: ${{ secrets.CHAT_ID }}
       - run: python app.py
       - run: |
           git config user.name github-actions
