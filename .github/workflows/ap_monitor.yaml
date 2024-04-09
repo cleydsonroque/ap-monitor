@@ -1,4 +1,4 @@
-name: run monitor Ap
+name: Monitor Ap
 on: push
   # schedule:
   #   - cron: '0 0/12 * * *'
