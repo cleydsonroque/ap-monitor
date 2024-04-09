@@ -102,8 +102,10 @@ class DataB():
 
     def anunciado_hoje(self, bairro='fonseca'):
         self.criar_conexão()
+        print(DATA_FORMATADA)
         self.cur.execute(f'''SELECT * FROM {bairro} WHERE criado_em = '{DATA_FORMATADA}';''')
         hoje = [registro for registro in self.cur.fetchall()]
+        print(hoje)
         self.encerrar_conexao()
         return hoje
     
