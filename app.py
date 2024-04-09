@@ -10,11 +10,11 @@ chat_id = os.environ.get('CHAT_ID')
 print(token)
 print(chat_id)
 
-bairros = ['piratininga', 'barreto', 'fonseca', 'icarai', 'centro']
-for bairro in bairros:
-    lista = Scr5Andar(bairro=bairro).saida()
-    bd = DataB()
-    bd.insere_dados(bairro=bairro, dados=lista)
-    anuncios = bd.anunciado_hoje(bairro=bairro)
-    to_send(anuncios, token, chat_id)
-print('finalizado')
+# bairros = ['piratininga', 'barreto', 'fonseca', 'icarai', 'centro']
+# for bairro in bairros:
+#     lista = Scr5Andar(bairro=bairro).saida()
+#     bd = DataB()
+#     bd.insere_dados(bairro=bairro, dados=lista)
+#     anuncios = bd.anunciado_hoje(bairro=bairro)
+#     to_send(anuncios, token, chat_id)
+# print('finalizado')
