@@ -21,7 +21,17 @@ jobs:
       - run: pip install python-dotenv
       - run: playwright install
       - run: python app.py
-      - run: |
+
+      - name: Check if there are any changes
+        id: verify_diff
+        run: |
+          git diff --quiet . || echo "changed=true" >> $GITHUB_OUTPUT
+
+      - name: Commit
+        if: steps.verify_diff.outputs.changed == 'true'
+        run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add .
+          git commit -m "update data"
+          git push
