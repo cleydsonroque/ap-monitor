@@ -4,8 +4,6 @@ from datetime import date
 BD = 'models/ap.db'
 DATA = date.today()
 DATA_FORMATADA = DATA.strftime('%d/%m/%Y')
-print(DATA)
-print(DATA_FORMATADA)
 
 
 class DataB():
@@ -102,10 +100,8 @@ class DataB():
 
     def anunciado_hoje(self, bairro='fonseca'):
         self.criar_conexão()
-        print(DATA_FORMATADA)
         self.cur.execute(f'''SELECT * FROM {bairro} WHERE criado_em = '{DATA_FORMATADA}';''')
         hoje = [registro for registro in self.cur.fetchall()]
-        print(hoje)
         self.encerrar_conexao()
         return hoje
     

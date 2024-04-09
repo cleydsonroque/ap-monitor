@@ -7,6 +7,8 @@ from models.send_ap import to_send
 load_dotenv()
 token = os.environ.get('TELEGRAM_API_KEY')
 chat_id = os.environ.get('CHAT_ID')
+print(token)
+print(chat_id)
 
 bairros = ['piratininga', 'barreto', 'fonseca', 'icarai', 'centro']
 for bairro in bairros:
