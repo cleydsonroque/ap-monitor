@@ -9,8 +9,7 @@ token = os.environ.get('TELEGRAM_API_KEY')
 chat_id = os.environ.get('CHAT_ID')
 
 
-# bairros = ['piratininga', 'barreto', 'fonseca', 'icarai', 'centro']
-bairros = ['piratininga', 'barreto']
+bairros = ['piratininga', 'barreto', 'fonseca', 'icarai', 'centro']
 for bairro in bairros:
     lista = Scr5Andar(bairro=bairro).saida()
     bd = DataB()

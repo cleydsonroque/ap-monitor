@@ -1,22 +1,26 @@
 name: Monitor Ap
-on: push
-  # schedule:
-  #   - cron: '0 0/12 * * *'
+on:
+  schedule:
+    - cron: '0 0/12 * * *'
 jobs:
   build:
     runs-on: ubuntu-latest
+
     env:
       TELEGRAM_API_KEY: ${{ secrets.TELEGRAM_API_KEY }}
       CHAT_ID: ${{ secrets.CHAT_ID }} 
+
     steps:
       - uses: szenius/set-timezone@v1.2
         with:
           timezoneLinux: "America/Sao_Paulo"
+
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
         with:
           python-version: '3.11' 
           cache: 'pip' # caching pip dependencies
+
       - run: pip install -r requirements.txt
       - run: pip install python-dotenv
       - run: playwright install
