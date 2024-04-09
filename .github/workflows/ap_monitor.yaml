@@ -9,12 +9,12 @@ jobs:
       TELEGRAM_API_KEY: ${{ secrets.TELEGRAM_API_KEY }}
       CHAT_ID: ${{ secrets.CHAT_ID }} 
     steps:
-      - name: Setup timezone
+      # - name: Setup timezone
         # uses: zcong1993/setup-timezone@master
-        uses: szenius/set-timezone@v1.2
-        with:
+        # uses: szenius/set-timezone@v1.2
+        # with:
           # timezone: America/Sao_Paulo
-          timezoneLinux: "America/Sao_Paulo"
+          # timezoneLinux: "America/Sao_Paulo"
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
         with:
